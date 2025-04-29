@@ -1,0 +1,112 @@
+@startuml
+
+package "Expense Tracker" {
+
+    package "Model" {
+        class Expense {
+            - id : int
+            - date : LocalDate
+            - amount : double
+            - category : String
+            - description : String
+            + getId() : int
+            + getDate() : LocalDate
+            + getAmount() : double
+            + getCategory() : String
+            + getDescription() : String
+            + setId(id: int) : void
+            + setDate(date: LocalDate) : void
+            + setAmount(amount: double) : void
+            + setCategory(category: String) : void
+            + setDescription(description: String) : void
+        }
+
+        class Category {
+            - id : int
+            - name : String
+            + getId() : int
+            + getName() : String
+            + setId(id: int) : void
+            + setName(name: String) : void
+        }
+    }
+
+    package "Service" {
+        class ExpenseManager {
+            - expenseRepository : ExpenseRepository
+            + addExpense(e: Expense) : void
+            + removeExpense(id: int) : void
+            + calculateTotalByCategory(category: String) : double
+            + getExpensesByDateRange(start: LocalDate, end: LocalDate) : List<Expense>
+            + getExpenses() : List<Expense>
+        }
+    }
+
+    package "Persistence" {
+        class FileHandler {
+            + saveExpensesToFile(expenses: List<Expense>, filename: String) : void
+            + loadExpensesFromFile(filename: String) : List<Expense>
+        }
+
+        interface ExpenseRepository {
+            + save(e: Expense) : void
+            + deleteById(id: int) : void
+            + findById(id: int) : Optional<Expense>
+            + findAll() : List<Expense>
+        }
+    }
+
+    package "Utils" {
+        class DateUtils {
+            + parseDate(date: String) : LocalDate
+            + formatDate(date: LocalDate) : String
+        }
+    }
+
+    package "Tests" {
+        package "Model" {
+            class ExpenseTest {
+                + testExpenseCreation() : void
+                + testExpenseValidation() : void
+            }
+            class CategoryTest {
+                + testCategoryCreation() : void
+            }
+        }
+
+        package "Service" {
+            class ExpenseManagerTest {
+                + testAddExpense() : void
+                + testCalculateTotal() : void
+            }
+        }
+
+        package "Persistence" {
+            class FileHandlerTest {
+                + testSaveToFile() : void
+                + testLoadFromFile() : void
+            }
+        }
+    }
+
+    package "Main" {
+        class Main {
+            + main(args: String[]) : void
+        }
+    }
+
+    Main --> ExpenseManager : interacts
+    Main --> FileHandler : interacts
+    ExpenseManager --> Expense : uses
+    ExpenseManager --> Category : uses
+    ExpenseManager --> FileHandler : interacts with
+    FileHandler --> Expense : processes
+    DateUtils --> Expense : formats
+
+    ExpenseTest ..> Expense : tests
+    CategoryTest ..> Category : tests
+    ExpenseManagerTest ..> ExpenseManager : tests
+    FileHandlerTest ..> FileHandler : tests
+}
+
+@enduml
