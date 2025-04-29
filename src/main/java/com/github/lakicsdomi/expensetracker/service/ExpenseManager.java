@@ -18,6 +18,12 @@ public class ExpenseManager implements IExpenseManager{
     }
 
     @Override
+    public void addExpense(double amount, Category category, String description){
+        Expense expense = new Expense(expenses.size(), LocalDate.now(), amount,category, description);
+        expenses.add(expense);
+    }
+
+    @Override
     public List<Expense> getExpenses() {
         return expenses;
     }

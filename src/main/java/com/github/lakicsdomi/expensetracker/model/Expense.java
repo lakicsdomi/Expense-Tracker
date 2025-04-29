@@ -53,4 +53,10 @@ public class Expense {
         this.description = description;
     }
 
+    @Override
+    public String toString(){
+        return String.format("Expense [ID: %d, Date: %s, Category: %s, Description: %s, Amount: %.2f]",
+                id, date, category, description, amount);
+    }
+
 }

@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface IExpenseManager {
     void addExpense(Expense expense);
+    void addExpense(double amount, Category category, String description);
     void deleteExpense(int id);
     double calculateTotalByCategory(Category category);
     Expense getExpenseById(int id);
